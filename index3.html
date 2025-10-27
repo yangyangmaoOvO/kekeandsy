@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrance Animation for Images | Demo 3 | Codrops</title>
+    <meta name="description" content="A circular stack intro animation for images." />
+    <meta name="keywords" content="gsap, animation, intro, stack, images" />
+    <meta name="author" content="deadrabbbbit for Codrops" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <script>document.documentElement.className = "js";</script>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 120%, #0a001a 0%, #000 100%);
+        height: 100vh;
+      }
+
+      #cuteFireworks {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+      }
+
+      .frame__demos {
+        margin-top: 15px;
+        margin-left: 1622px;
+        margin-right: 0;
+      }
+      .frame__demos a img,
+      .frame__demos img {
+        width: 60px;
+        height: auto;
+        margin: 0 5px;
+        border: none;
+        vertical-align: middle;
+      }
+
+      .image-switcher {
+        position: fixed;
+        bottom: 0px;
+        left: 20px;
+        z-index: 9999;
+        cursor: pointer;
+      }
+      .image-switcher img {
+        width: 60px;
+        height: auto;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+      }
+      .image-switcher img:hover {
+        transform: scale(1.05);
+      }
+
+      .music-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        z-index: 9999;
+        transition: all 0.3s;
+      }
+      .music-btn:hover {
+        background: rgba(0,0,0,0.9);
+        transform: scale(1.05);
+      }
+
+      /* 自定义提示框样式 */
+      #customConfirm {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        text-align: center;
+        z-index: 10000;
+        padding: 20px;
+      }
+      #customConfirm p {
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+      #customConfirm button {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+      }
+      #yesBtn { background: #4CAF50; margin-right: 15px; }
+      #noBtn { background: #f44336; }
+    </style>
+  </head>
+
+  <body class="demo-3 loading">
+    <div class="bg-overlay"></div>
+
+    <main>
+      <div class="image-switcher">
+        <img id="switchImg" src="sy/tutu1.png" alt="切换图片" />
+      </div>
+
+      <header class="frame">
+        <nav class="frame__demos">
+          <a href="index.html"><img src="sy/tutuA.png" alt="Variation 1" /></a>
+          <a href="index2.html"><img src="sy/tutuB.PNG" alt="Variation 2" /></a>
+          <img src="sy/tutuC.PNG" alt="Variation 3" />
+        </nav>
+      </header>
+
+      <div class="content">
+        <div class="scene">
+          <div class="container">
+            <div class="group">
+              <div class="card"><div class="card__img" style="background-image: url(/sy/1.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/2.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/3.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/4.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/5.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/6.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/7.jpg)"></div></div>
+              <div class="card"><div class="card__img" style="background-image: url(/sy/8.jpg)"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <canvas id="cuteFireworks"></canvas>
+
+        <!-- 自定义提示框 -->
+        <div id="customConfirm">
+          <p>是否查阅？</p>
+          <button id="yesBtn">是</button>
+          <button id="noBtn">否</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 音乐按钮 -->
+    <button id="playMusic" class="music-btn">🔊 播放背景音乐</button>
+    <audio id="bgMusic" loop>
+      <source src="music/love.mp3" type="audio/mpeg">
+      您的浏览器不支持音频播放
+    </audio>
+
+    <script src="js/gsap.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script type="module" src="js/index3.js"></script>
+
+    <script>
+      // ===== 背景音乐按钮 =====
+      document.getElementById('playMusic').addEventListener('click', function() {
+        const audio = document.getElementById('bgMusic');
+        audio.play().then(() => { this.style.display = 'none'; })
+        .catch(err => console.log('播放失败:', err));
+      });
+
+      // ===== 图片切换按钮 =====
+      const img = document.getElementById('switchImg');
+      let isFirstImg = true;
+      img.addEventListener('click', function() {
+        if (isFirstImg) {
+          this.src = 'sy/tutu2.png';
+        } else {
+          this.src = 'sy/tutu1.png';
+        }
+        isFirstImg = !isFirstImg;
+      });
+
+      // ===== 自定义提示框逻辑 =====
+      const customConfirm = document.getElementById("customConfirm");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      let popupImg = null;
+
+      document.addEventListener("click", function(e) {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const clickRange = 100;
+
+        // 如果点击的是弹窗或弹出的图片，则不触发提示框
+        if (customConfirm.contains(e.target) || (popupImg && popupImg.contains(e.target))) {
+          return;
+        }
+
+        // 点击中间区域弹出提示框
+        if (
+          e.clientX > centerX - clickRange &&
+          e.clientX < centerX + clickRange &&
+          e.clientY > centerY - clickRange &&
+          e.clientY < centerY + clickRange
+        ) {
+          customConfirm.style.display = "block";
+        }
+      });
+
+      // 点击“是” → 弹出图片
+      yesBtn.addEventListener("click", () => {
+        customConfirm.style.display = "none";
+
+        popupImg = document.createElement("img");
+        popupImg.src = "sy/cart1.png";
+        popupImg.style.position = "fixed";
+        popupImg.style.top = "50%";
+        popupImg.style.left = "50%";
+        popupImg.style.transform = "translate(-50%, -50%)";
+        popupImg.style.width = "400px";
+        popupImg.style.height = "auto";
+        popupImg.style.zIndex = "10001";
+        popupImg.style.borderRadius = "12px";
+        popupImg.style.boxShadow = "0 8px 20px rgba(0,0,0,0.5)";
+        popupImg.style.cursor = "pointer";
+
+        // 点击图片后关闭图片，回到原页面
+        popupImg.addEventListener("click", () => {
+          popupImg.remove();
+          popupImg = null;
+        });
+
+        document.body.appendChild(popupImg);
+      });
+
+      // 点击“否” → 关闭提示框
+      noBtn.addEventListener("click", () => {
+        customConfirm.style.display = "none";
+      });
+
+      // ===== 星空烟花动画 =====
+      const canvas = document.getElementById("cuteFireworks");
+      const ctx = canvas.getContext("2d");
+      let w = (canvas.width = window.innerWidth);
+      let h = (canvas.height = window.innerHeight);
+
+      const colors = ["#ffb3c6","#ffc8dd","#cdb4db","#a2d2ff","#bde0fe","#ffe5ec","#ffd6a5","#fdffb6","#b9fbc0","#b5e48c","#fcd5ce"];
+
+      const stars = Array.from({ length: 200 }, () => ({
+        x: Math.random()*w, y: Math.random()*h,
+        size: Math.random()*1.5, alpha: Math.random(),
+        speed: 0.002+Math.random()*0.003
+      }));
+
+      class Particle {
+        constructor(x,y,vx,vy,color,shape){
+          this.x=x; this.y=y; this.vx=vx; this.vy=vy;
+          this.color=color; this.alpha=1; this.size=Math.random()*3+2;
+          this.decay=Math.random()*0.01+0.005; this.shape=shape;
+          this.glow=15+Math.random()*15;
+        }
+        draw(){
+          ctx.save();
+          ctx.globalAlpha=this.alpha;
+          ctx.fillStyle=this.color;
+          ctx.shadowBlur=this.glow;
+          ctx.shadowColor=this.color;
+          ctx.beginPath();
+          if(this.shape==="star"){ drawStar(ctx,this.x,this.y,5,this.size*2,this.size); }
+          else if(this.shape==="heart"){ drawHeart(ctx,this.x,this.y,this.size*2); }
+          else{ ctx.arc(this.x,this.y,this.size,0,Math.PI*2); }
+          ctx.fill();
+          ctx.restore();
+        }
+        update(){
+          this.x+=this.vx;
+          this.y+=this.vy;
+          this.vy+=0.03;
+          this.alpha-=this.decay;
+        }
+      }
+
+      class Firework {
+        constructor(x,targetY,color){
+          this.x=x; this.y=h; this.targetY=targetY; this.color=color;
+          this.speed=(h-targetY)/30; this.trail=[]; this.exploded=false; this.particles=[];
+        }
+        update(){
+          if(!this.exploded){
+            this.trail.push({x:this.x,y:this.y});
+            if(this.trail.length>10)this.trail.shift();
+            this.y-=this.speed;
+            if(this.y<=this.targetY){ this.explode(); this.exploded=true; }
+          } else {
+            this.particles.forEach(p=>p.update());
+          }
+        }
+        draw(){
+          if(!this.exploded){
+            ctx.beginPath();
+            ctx.strokeStyle=this.color;
+            ctx.shadowBlur=20;
+            ctx.shadowColor=this.color;
+            ctx.lineWidth=2.5;
+            ctx.moveTo(this.x,this.y);
+            this.trail.forEach(t=>ctx.lineTo(t.x,t.y));
+            ctx.stroke();
+          } else {
+            this.particles.forEach(p=>p.draw());
+          }
+        }
+        explode(){
+          const count=60+Math.random()*60;
+          const shapes=["circle","star","heart"];
+          for(let i=0;i<count;i++){
+            const angle=Math.random()*Math.PI*2;
+            const speed=Math.random()*3+1.5;
+            const shape=shapes[Math.floor(Math.random()*shapes.length)];
+            this.particles.push(new Particle(this.x,this.y,Math.cos(angle)*speed,Math.sin(angle)*speed,this.color,shape));
+          }
+          if(Math.random()<0.25){ setTimeout(()=>this.explode(),500+Math.random()*400); }
+        }
+      }
+
+      function drawStar(ctx,x,y,spikes,outerRadius,innerRadius){
+        let rot=Math.PI/2*3,step=Math.PI/spikes;
+        ctx.beginPath();
+        ctx.moveTo(x,y-outerRadius);
+        for(let i=0;i<spikes;i++){
+          ctx.lineTo(x+Math.cos(rot)*outerRadius,y+Math.sin(rot)*outerRadius);
+          rot+=step;
+          ctx.lineTo(x+Math.cos(rot)*innerRadius,y+Math.sin(rot)*innerRadius);
+          rot+=step;
+        }
+        ctx.closePath();
+      }
+
+      function drawHeart(ctx,x,y,size){
+        ctx.beginPath();
+        const topCurveHeight=size*0.3;
+        ctx.moveTo(x,y+topCurveHeight);
+        ctx.bezierCurveTo(x-size/2,y-topCurveHeight,x-size,y+size/2,x,y+size);
+        ctx.bezierCurveTo(x+size,y+size/2,x+size/2,y-topCurveHeight,x,y+topCurveHeight);
+        ctx.closePath();
+      }
+
+      const fireworks=[];
+      function drawStars(){
+        stars.forEach(s=>{
+          s.alpha+=s.speed;
+          if(s.alpha>1||s.alpha<0)s.speed*=-1;
+          ctx.globalAlpha=s.alpha;
+          ctx.fillStyle="#ffffff";
+          ctx.fillRect(s.x,s.y,s.size,s.size);
+        });
+        ctx.globalAlpha=1;
+      }
+
+      function loop(){
+        requestAnimationFrame(loop);
+        ctx.fillStyle="rgba(0,0,20,0.2)";
+        ctx.fillRect(0,0,w,h);
+        drawStars();
+        if(Math.random()<0.03){
+          const x=Math.random()*w*0.8+w*0.1;
+          const targetY=Math.random()*h*0.4+h*0.2;
+          const color=colors[Math.floor(Math.random()*colors.length)];
+          fireworks.push(new Firework(x,targetY,color));
+        }
+        fireworks.forEach((fw,i)=>{
+          fw.update();
+          fw.draw();
+          if(fw.exploded && fw.particles.every(p=>p.alpha<=0)) fireworks.splice(i,1);
+        });
+      }
+
+      canvas.addEventListener("click", e=>{
+        const color=colors[Math.floor(Math.random()*colors.length)];
+        fireworks.push(new Firework(e.clientX,e.clientY,color));
+      });
+
+      loop();
+
+      window.addEventListener("resize", ()=>{
+        w=canvas.width=window.innerWidth;
+        h=canvas.height=window.innerHeight;
+      });
+    </script>
+  </body>
+</html>

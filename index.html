@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrance Animation for Images | Demo 1 | Codrops</title>
+    <meta name="description" content="A circular stack intro animation for images." />
+    <meta name="keywords" content="gsap, animation, intro, stack, images" />
+    <meta name="author" content="deadrabbbbit for Codrops" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gloock&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+
+    <script>
+      document.documentElement.className = "js";
+    </script>
+
+    <style>
+      /* 导航栏样式 */
+      .frame__demos {
+        margin-top: 15px;
+        margin-left: 1622px;
+        margin-right: 0;
+      }
+      .frame__demos a img,
+      .frame__demos img {
+        width: 60px;
+        height: auto;
+        margin: 0 5px;
+        border: none;
+        vertical-align: middle;
+      }
+
+      /* 背景音乐按钮 */
+      .music-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        z-index: 9999;
+        transition: all 0.3s;
+      }
+      .music-btn:hover {
+        background: rgba(0,0,0,0.9);
+        transform: scale(1.05);
+      }
+
+      /* 卡片样式 */
+      .birthday-card {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 40px 60px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        text-align: center;
+        font-size: 2em;
+        color: #ff0066;
+        z-index: 9999;
+        display: none; /* 默认隐藏 */
+      }
+      .birthday-card:hover {
+        cursor: pointer;
+      }
+
+      /* 彩屑样式 */
+      .confetti {
+        position: absolute;
+        opacity: 0;
+        animation: confetti-fall linear infinite;
+      }
+      @keyframes confetti-fall {
+        0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+      }
+    </style>
+  </head>
+
+  <body class="demo-1 loading">
+    <div class="bg-overlay"></div>
+    <div data-debug><div></div></div>
+
+    <main>
+      <header class="frame">
+        <nav class="frame__tags"></nav>
+        <nav class="frame__demos">
+          <a href="index.html"><img src="sy/tutuA.png" alt="Variation 1" /></a>
+          <a href="index2.html"><img src="sy/tutuB.PNG" alt="Variation 2" /></a>
+          <a href="index3.html"><img src="sy/tutuC.PNG" alt="Variation 3" /></a>
+        </nav>
+      </header>
+
+      <div class="content">
+        <div class="scene">
+          <div class="group">
+            <div class="card"><div class="card__img" style="background-image: url(/keke/1.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/2.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/3.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/4.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/5.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/6.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/7.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/keke/8.jpg)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 卡片显示区域 -->
+      <div class="birthday-card" id="birthdayCard">
+        <div id="cardText"></div>
+      </div>
+    </main>
+
+    <!-- 背景音乐按钮和音频 -->
+    <button id="playMusic" class="music-btn">🔊 播放背景音乐</button>
+    <audio id="bgMusic" loop>
+      <source src="music/special.mp3" type="audio/mpeg">
+      您的浏览器不支持音频播放
+    </audio>
+
+    <!-- 脚本 -->
+    <script src="js/gsap.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script type="module" src="js/index.js"></script>
+
+    <script>
+      // 播放背景音乐
+      document.getElementById('playMusic').addEventListener('click', function() {
+        const audio = document.getElementById('bgMusic');
+        audio.play().then(() => { this.style.display = 'none'; })
+             .catch(err => { console.log('播放失败:', err); });
+      });
+
+      // 每张图片对应的文字
+      const messages = [
+        "Happy Birthday 🎉",
+        "Wishing you joy 🌸",
+        "Have a great year 🥳",
+        "All goes as you wish 💖",
+        "Celebrate today 🎂",
+        "Cheers to you 🥂",
+        "Much love ❤️",
+        "Best wishes 🌟"
+      ];
+
+      // 获取图片元素和卡片
+      const cards = document.querySelectorAll('.group .card__img');
+      const birthdayCard = document.getElementById('birthdayCard');
+      const cardText = document.getElementById('cardText');
+
+      // 点击图片显示卡片
+      cards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+          cardText.textContent = messages[index];
+          birthdayCard.style.display = 'block';
+        });
+      });
+
+      
+
+      // 点击卡片隐藏
+      birthdayCard.addEventListener('click', () => {
+        birthdayCard.style.display = 'none';
+      });
+
+      // 彩屑效果
+      const container = document.body; // 改为 body
+      const colors = ['#ff6b6b','#4ecdc4','#ffd166','#6a0572','#06d6a0','#118ab2','#ff69b4','#f72585','#3a86ff','#ffbe0b'];
+      const confettiCount = 60;
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random()*8+4;
+        const left = Math.random()*100;
+        const delay = Math.random()*4;
+        const duration = Math.random()*3+3;
+        const rotate = Math.random()*720;
+        confetti.style.background = color;
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        confetti.style.left = `${left}%`;
+        confetti.style.animationDelay = `${delay}s`;
+        confetti.style.animationDuration = `${duration}s`;
+        confetti.style.transform = `rotate(${rotate}deg)`;
+        container.appendChild(confetti);
+      }
+    </script>
+  </body>
+</html>

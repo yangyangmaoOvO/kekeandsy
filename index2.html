@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Entrance Animation for Images | Demo 2 | Codrops</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap&family=Gloock&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <script>document.documentElement.className = "js";</script>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        background: radial-gradient(circle at 50% 120%, #a8edea 0%, #fed6e3 100%);
+      }
+
+      /* 浮动文字 */
+      .cute-text {
+        position: fixed;
+        bottom: 450px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'ZCOOL KuaiLe', cursive;
+        font-size: 2.5rem;
+        background: linear-gradient(90deg, #fed6e3, #fad0c4, #a8edea);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 2px 2px 5px rgba(206, 206, 206, 0.3);
+        z-index: 1000;
+        pointer-events: auto;
+        cursor: pointer;
+        opacity: 0; /* 初始透明 */
+        transition: opacity 2s ease; /* 淡入过渡 */
+        animation: floatText 3s ease-in-out infinite alternate;
+      }
+
+      @keyframes floatText {
+        0% { transform: translateX(-50%) translateY(0); }
+        100% { transform: translateX(-50%) translateY(-12px); }
+      }
+
+      /* 爱心样式 */
+      .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(45deg, #ff5f6d, #ffc371);
+        transform: rotate(-45deg);
+        animation: heart-float 2s ease-out forwards;
+        z-index: 9999;
+        box-shadow: 0 0 8px rgba(255,255,255,0.6);
+      }
+
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: inherit;
+        border-radius: 50%;
+      }
+
+      .heart::before { top: -10px; left: 0; }
+      .heart::after { left: 10px; top: 0; }
+
+      @keyframes heart-float {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) scale(1) rotate(-45deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--x,0px), -150px) scale(var(--scale,1.5)) rotate(calc(-45deg + var(--rotate,0deg)));
+        }
+      }
+
+      /* 导航栏样式 */
+      .frame__demos {
+        margin-top: 15px;
+        margin-left: 1622px;
+      }
+      .frame__demos a img,
+      .frame__demos img {
+        width: 60px;
+        height: auto;
+        margin: 0 5px;
+        border: none;
+        vertical-align: middle;
+      }
+
+      /* 播放音乐按钮 */
+      .music-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        z-index: 9999;
+        transition: all 0.3s;
+      }
+      .music-btn:hover {
+        background: rgba(0,0,0,0.9);
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body class="demo-2 loading">
+    <div class="bg-overlay"></div>
+
+    <main>
+      <!-- 可爱文字 -->
+      <div class="cute-text">让我们成为幸福大王</div>
+
+      <!-- 图片导航 -->
+      <header class="frame">
+        <nav class="frame__demos">
+          <a href="index.html"><img src="sy/tutuA.png" alt="Variation 1" /></a>
+          <img src="sy/tutuB.PNG" alt="Variation 2" />
+          <a href="index3.html"><img src="sy/tutuC.PNG" alt="Variation 3" /></a>
+        </nav>
+      </header>
+
+      <!-- 场景卡片 -->
+      <div class="content">
+        <div class="scene">
+          <div class="group">
+            <div class="card"><div class="card__img" style="background-image: url(/our/1.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/9.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/3.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/4.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/5.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/6.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/7.jpg)"></div></div>
+            <div class="card"><div class="card__img" style="background-image: url(/our/10.jpg)"></div></div>
+          </div>
+        </div>
+
+        <!-- 泡泡背景 -->
+        <div class="bubble-scene"></div>
+      </div>
+    </main>
+
+    <!-- 播放音乐按钮 -->
+    <button id="playMusic" class="music-btn">🔊 播放背景音乐</button>
+    <audio id="bgMusic" loop>
+      <source src="music/our.mp3" type="audio/mpeg">
+      您的浏览器不支持音频播放
+    </audio>
+
+    <script src="js/gsap.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script type="module" src="js/index2.js"></script>
+
+    <script>
+      // 文字淡入
+      const cuteText = document.querySelector('.cute-text');
+      setTimeout(() => cuteText.style.opacity = 1, 2000);
+
+      // 点击文字生成彩色爱心
+      cuteText.addEventListener('click', function() {
+        const heartCount = 5; 
+        const rect = cuteText.getBoundingClientRect();
+
+        for(let i=0; i<heartCount; i++){
+          const heart = document.createElement('div');
+          heart.classList.add('heart');
+
+          const xOffset = (Math.random() - 0.5) * 100; // 水平随机
+          const yOffset = (Math.random() - 0.5) * 60;  // 垂直随机
+          heart.style.left = `${rect.left + rect.width/2 + xOffset}px`;
+          heart.style.top = `${rect.top + yOffset}px`;
+
+          const hue = Math.floor(Math.random() * 360);
+          heart.style.background = `linear-gradient(45deg, hsl(${hue}, 80%, 70%), hsl(${hue}, 70%, 60%))`;
+
+          heart.style.setProperty('--rotate', `${Math.random()*60-30}deg`);
+          heart.style.setProperty('--x', `${Math.random()*80-40}px`);
+          heart.style.setProperty('--scale', `${Math.random()*0.5 + 1}`);
+
+          document.body.appendChild(heart);
+          heart.addEventListener('animationend', () => heart.remove());
+        }
+      });
+
+      // 播放音乐
+      document.getElementById('playMusic').addEventListener('click', function() {
+        const audio = document.getElementById('bgMusic');
+        audio.play().then(() => this.style.display='none').catch(err => console.log('播放失败:', err));
+      });
+
+      // 泡泡背景
+      const container = document.querySelector('.bubble-scene');
+      const bubbleCount = 50;
+      for (let i=0; i<bubbleCount; i++){
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        const size = Math.random()*40+20;
+        const left = Math.random()*100;
+        const delay = Math.random()*5;
+        const duration = Math.random()*5+6;
+        const hue = Math.floor(Math.random()*360);
+        bubble.style.background = `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), hsla(${hue},70%,70%,0.2))`;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${left}%`;
+        bubble.style.animationDelay = `${delay}s`;
+        bubble.style.animationDuration = `${duration}s`;
+        container.appendChild(bubble);
+      }
+    </script>
+    <style>
+      .bubble-scene { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+      .bubble { position: absolute; bottom: -80px; border-radius: 50%; opacity: 0.6;
+        animation: bubble-rise linear infinite;
+        box-shadow: 0 0 10px rgba(255,255,255,0.3) inset, 0 0 15px rgba(255,255,255,0.2);
+      }
+      @keyframes bubble-rise {
+        0% { transform: translateY(0) translateX(0) scale(0.9) rotate(0deg); opacity: 0.4; }
+        50% { transform: translateY(-50vh) translateX(20px) scale(1.1) rotate(15deg); opacity: 0.7; }
+        100% { transform: translateY(-100vh) translateX(-20px) scale(0.8) rotate(-15deg); opacity: 0; }
+      }
+    </style>
+  </body>
+</html>
